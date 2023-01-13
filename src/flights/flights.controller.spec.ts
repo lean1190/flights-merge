@@ -7,7 +7,7 @@ import { FlightsModule } from './flights.module';
 
 describe('FlightsController', () => {
     let app: INestApplication;
-    let fakeFlightsService: FlightsService = {
+    let fakeFlightsService = {
         getFlights: async () => []
     };
 

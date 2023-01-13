@@ -2,7 +2,6 @@ import { Test, TestingModule } from '@nestjs/testing';
 import { HttpService } from '@nestjs/axios';
 
 import { FlightsService } from './flights.service';
-import { Flight } from './interfaces/flight.interface';
 import { exampleFlights1, exampleFlights2, expectedMergedFlights } from './test-flights';
 
 describe('FlightsService', () => {
@@ -13,7 +12,7 @@ describe('FlightsService', () => {
 
     beforeEach(async () => {
         const module: TestingModule = await Test
-            .createTestingModule({ providers: [FlightsService] })
+            .createTestingModule({ providers: [FlightsService, HttpService] })
             .overrideProvider(HttpService).useValue(fakeHttpService)
             .compile();
 
