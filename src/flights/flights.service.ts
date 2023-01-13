@@ -19,6 +19,7 @@ export class FlightsService {
                     ...flightsFromSource1.data.flights,
                     ...flightsFromSource2.data.flights,
                 ])),
+                map((allFlights) => this.filterUniqueFlights(allFlights)),
                 catchError((error) => {
                     throw 'Something went wrong';
                 })
@@ -38,6 +39,10 @@ export class FlightsService {
                 duration: slice.duration
             }))
         }));
+    }
+
+    private filterUniqueFlights(flights: Flight[]): Flight[] {
+        return [];
     }
 }
 
