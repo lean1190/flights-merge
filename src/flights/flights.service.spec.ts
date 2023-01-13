@@ -3,6 +3,7 @@ import { HttpService } from '@nestjs/axios';
 
 import { FlightsService } from './flights.service';
 import { Flight } from './interfaces/flight.interface';
+import { exampleFlights1, exampleFlights2, expectedMergedFlights } from './test-flights';
 
 describe('FlightsService', () => {
     let service: FlightsService;
@@ -31,20 +32,14 @@ describe('FlightsService', () => {
             );
         });
 
-        it('should merge the flights responses from every source', async () => {
-            const expectedFlights: Flight[] = [];
-
+        it('should merge the flights and remove duplicates', async () => {
             fakeHttpService.get = jest
                 .fn()
                 .mockResolvedValueOnce(exampleFlights1)
                 .mockResolvedValueOnce(exampleFlights2);
 
             const flights = await service.getFlights();
-            expect(flights).toBe(expectedFlights)
-        });
-
-        it('should remove duplicate flights', () => {
-
+            expect(flights).toBe(expectedMergedFlights);
         });
 
         it('should return an error if any of the sources fails', () => {
