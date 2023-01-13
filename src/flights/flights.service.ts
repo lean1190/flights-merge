@@ -11,21 +11,19 @@ import { getFlightIdentifier } from './helpers/identifier';
 export class FlightsService {
     constructor(private readonly httpService: HttpService) {}
 
-    public async getFlights(): Promise<Flight[]> {
-        return firstValueFrom(
-            combineLatest([
-                this.httpService.get<ResponseGetFlights>(flightsSourceUrl1),
-                this.httpService.get<ResponseGetFlights>(flightsSourceUrl2),
-            ]).pipe(
-                map(([flightsFromSource1, flightsFromSource2]) => this.mapResponseToFlights([
-                    ...flightsFromSource1.data.flights,
-                    ...flightsFromSource2.data.flights,
-                ])),
-                map((allFlights) => this.filterUniqueFlights(allFlights)),
-                catchError((error) => {
-                    throw 'Something went wrong';
-                })
-            )
+    public getFlights() {
+        return combineLatest([
+            this.httpService.get<ResponseGetFlights>(flightsSourceUrl1),
+            this.httpService.get<ResponseGetFlights>(flightsSourceUrl2),
+        ]).pipe(
+            map(([flightsFromSource1, flightsFromSource2]) => this.mapResponseToFlights([
+                ...flightsFromSource1.data.flights,
+                ...flightsFromSource2.data.flights,
+            ])),
+            map((allFlights) => this.filterUniqueFlights(allFlights)),
+            catchError((error) => {
+                throw 'Something went wrong';
+            })
         );
     }
 

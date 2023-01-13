@@ -3,6 +3,7 @@ import { HttpService } from '@nestjs/axios';
 
 import { FlightsService } from './flights.service';
 import { exampleFlights1, exampleFlights2, expectedMergedFlights } from './test-flights';
+import { takeValues } from '../helpers/observable';
 
 describe('FlightsService', () => {
     let service: FlightsService;
@@ -22,7 +23,7 @@ describe('FlightsService', () => {
     describe('getFlights', () => {
 
         it('should get flights from every source', async () => {
-            await service.getFlights();
+            await takeValues(service.getFlights());
             expect(fakeHttpService.get).toHaveBeenCalledWith(
                 'https://coding-challenge.powerus.de/flight/source1',
             );
@@ -37,17 +38,17 @@ describe('FlightsService', () => {
                 .mockResolvedValueOnce(exampleFlights1)
                 .mockResolvedValueOnce(exampleFlights2);
 
-            const flights = await service.getFlights();
+            const [flights] = await takeValues(service.getFlights());
             expect(flights).toBe(expectedMergedFlights);
         });
 
-        it('should return an error if any of the sources fails', () => {
+        it('should return an error if any of the sources fails', async () => {
             fakeHttpService.get = jest
                 .fn()
                 .mockResolvedValueOnce({})
                 .mockRejectedValueOnce(new Error('Something went wrong'));
 
-            return expect(service.getFlights()).rejects.toThrow('Something went wrong');
+            return expect(await takeValues(service.getFlights())).rejects.toThrow('Something went wrong');
         });
     });
 });
