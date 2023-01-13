@@ -25,7 +25,7 @@ export class FlightsService {
                 catchError((error) => {
                     throw 'Something went wrong';
                 })
-            ),
+            )
         );
     }
 
