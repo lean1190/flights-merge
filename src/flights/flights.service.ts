@@ -1,7 +1,7 @@
 import { uniqBy } from 'lodash';
 import { HttpService } from '@nestjs/axios';
 import { Injectable } from '@nestjs/common';
-import { catchError, combineLatest, firstValueFrom, map } from 'rxjs';
+import { catchError, combineLatest, map } from 'rxjs';
 
 import { Flight } from './interfaces/flight.interface';
 import { flightsSourceUrl1, flightsSourceUrl2 } from './constants';
@@ -22,7 +22,7 @@ export class FlightsService {
             ])),
             map((allFlights) => this.filterUniqueFlights(allFlights)),
             catchError((error) => {
-                throw 'Something went wrong';
+                throw new Error('Something went wrong');
             })
         );
     }

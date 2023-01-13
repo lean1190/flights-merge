@@ -220,6 +220,7 @@ export const exampleFlights2 = {
 
 export const expectedMergedFlights = [
     {
+        price: 129,
         slices: [
             {
                 originName: 'Schonefeld',
@@ -238,9 +239,9 @@ export const expectedMergedFlights = [
                 duration: 120,
             },
         ],
-        price: 129,
     },
     {
+        price: 134.81,
         slices: [
             {
                 originName: 'Schonefeld',
@@ -259,9 +260,9 @@ export const expectedMergedFlights = [
                 duration: 110,
             },
         ],
-        price: 134.81,
     },
     {
+        price: 134.81,
         slices: [
             {
                 originName: 'Schonefeld',
@@ -280,9 +281,9 @@ export const expectedMergedFlights = [
                 duration: 120,
             },
         ],
-        price: 134.81,
     },
     {
+        price: 147.9,
         slices: [
             {
                 originName: 'Schonefeld',
@@ -301,9 +302,9 @@ export const expectedMergedFlights = [
                 duration: 110,
             },
         ],
-        price: 147.9,
     },
     {
+        price: 147.9,
         slices: [
             {
                 originName: 'Schonefeld',
@@ -322,9 +323,9 @@ export const expectedMergedFlights = [
                 duration: 110,
             },
         ],
-        price: 147.9,
     },
     {
+        price: 130.1,
         slices: [
             {
                 originName: 'Schonefeld',
@@ -343,30 +344,9 @@ export const expectedMergedFlights = [
                 duration: 120,
             },
         ],
-        price: 130.1,
     },
     {
-        slices: [
-            {
-                originName: 'Schonefeld',
-                destinationName: 'Stansted',
-                departureDateTimeUtc: '2019-08-08T20:25:00.000Z',
-                arrivalDateTimeUtc: '2019-08-08T22:25:00.000Z',
-                flightNumber: '8545',
-                duration: 120,
-            },
-            {
-                originName: 'Stansted',
-                destinationName: 'Schonefeld',
-                departureDateTimeUtc: '2019-08-10T06:50:00.000Z',
-                arrivalDateTimeUtc: '2019-08-10T08:40:00.000Z',
-                flightNumber: '145',
-                duration: 110,
-            },
-        ],
-        price: 134.81,
-    },
-    {
+        price: 152.36,
         slices: [
             {
                 originName: 'Schonefeld',
@@ -385,9 +365,9 @@ export const expectedMergedFlights = [
                 duration: 100,
             },
         ],
-        price: 152.36,
     },
     {
+        price: 154.26,
         slices: [
             {
                 originName: 'Schonefeld',
@@ -406,27 +386,5 @@ export const expectedMergedFlights = [
                 duration: 124,
             },
         ],
-        price: 154.26,
     },
-    {
-        slices: [
-            {
-                originName: 'Schonefeld',
-                destinationName: 'Stansted',
-                departureDateTimeUtc: '2019-08-08T16:00:00.000Z',
-                arrivalDateTimeUtc: '2019-08-08T17:55:00.000Z',
-                flightNumber: '146',
-                duration: 115,
-            },
-            {
-                originName: 'Stansted',
-                destinationName: 'Schonefeld',
-                departureDateTimeUtc: '2019-08-10T06:50:00.000Z',
-                arrivalDateTimeUtc: '2019-08-10T08:40:00.000Z',
-                flightNumber: '145',
-                duration: 110,
-            },
-        ],
-        price: 147.9,
-    }
 ];

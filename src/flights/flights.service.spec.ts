@@ -1,5 +1,6 @@
 import { Test, TestingModule } from '@nestjs/testing';
 import { HttpService } from '@nestjs/axios';
+import { of, throwError } from 'rxjs';
 
 import { FlightsService } from './flights.service';
 import { exampleFlights1, exampleFlights2, expectedMergedFlights } from './test-flights';
@@ -7,11 +8,16 @@ import { takeValues } from '../helpers/observable';
 
 describe('FlightsService', () => {
     let service: FlightsService;
-    let fakeHttpService = {
-        get: jest.fn(() => {}),
-    };
+    let fakeHttpService: any;
 
     beforeEach(async () => {
+        fakeHttpService = {
+            get: jest
+                .fn()
+                .mockReturnValueOnce(of({ data: exampleFlights1 }))
+                .mockReturnValueOnce(of({ data: exampleFlights2 })),
+        };
+
         const module: TestingModule = await Test
             .createTestingModule({ providers: [FlightsService, HttpService] })
             .overrideProvider(HttpService).useValue(fakeHttpService)
@@ -24,31 +30,27 @@ describe('FlightsService', () => {
 
         it('should get flights from every source', async () => {
             await takeValues(service.getFlights());
-            expect(fakeHttpService.get).toHaveBeenCalledWith(
-                'https://coding-challenge.powerus.de/flight/source1',
-            );
-            expect(fakeHttpService.get).toHaveBeenCalledWith(
-                'https://coding-challenge.powerus.de/flight/source1',
-            );
+            expect(fakeHttpService.get).toHaveBeenCalledWith('https://coding-challenge.powerus.de/flight/source1');
+            expect(fakeHttpService.get).toHaveBeenCalledWith('https://coding-challenge.powerus.de/flight/source1');
         });
 
         it('should merge the flights and remove duplicates', async () => {
-            fakeHttpService.get = jest
-                .fn()
-                .mockResolvedValueOnce(exampleFlights1)
-                .mockResolvedValueOnce(exampleFlights2);
-
             const [flights] = await takeValues(service.getFlights());
-            expect(flights).toBe(expectedMergedFlights);
+            expect(flights).toStrictEqual(expectedMergedFlights);
         });
 
         it('should return an error if any of the sources fails', async () => {
+            const expectedError = new Error('Something went wrong');
             fakeHttpService.get = jest
                 .fn()
-                .mockResolvedValueOnce({})
-                .mockRejectedValueOnce(new Error('Something went wrong'));
+                .mockReturnValueOnce(of(exampleFlights1))
+                .mockReturnValueOnce(throwError(() => expectedError));
 
-            return expect(await takeValues(service.getFlights())).rejects.toThrow('Something went wrong');
+            try {
+                await takeValues(service.getFlights());
+            } catch (error) {
+                expect(error).toStrictEqual(expectedError);
+            }
         });
     });
 });
