@@ -1,7 +1,6 @@
 import { Controller, Get } from '@nestjs/common';
 
 import { FlightsService } from './flights.service';
-import { Flight } from './interfaces/flight.interface';
 
 @Controller('flights')
 export class FlightsController {
