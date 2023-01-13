@@ -27,7 +27,7 @@ describe('identifier', () => {
                     },
                 ],
             };
-            const expectedIdentifier = 'number1-deptime1-arrtime1--number2-deptime2-arrtime2--';
+            const expectedIdentifier = 'number1|deptime1|arrtime1--number2|deptime2|arrtime2--';
 
             expect(getFlightIdentifier(flight)).toBe(expectedIdentifier);
         });
