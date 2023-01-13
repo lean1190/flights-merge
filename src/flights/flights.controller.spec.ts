@@ -7,14 +7,13 @@ import { FlightsService } from './flights.service';
 import { FlightsModule } from './flights.module';
 
 describe('FlightsController', () => {
+    const flights = [{}, {}, {}];
     let app: INestApplication;
     let fakeFlightsService: any;
 
     beforeEach(async () => {
         fakeFlightsService = {
-            getFlights: jest
-                .fn()
-                .mockReturnValueOnce(of([]))
+            getFlights: jest.fn().mockReturnValueOnce(of(flights)),
         };
         const module: TestingModule = await Test
             .createTestingModule({ imports: [FlightsModule] })
@@ -34,7 +33,7 @@ describe('FlightsController', () => {
             return request(app.getHttpServer())
                 .get('/flights')
                 .expect(200)
-                .expect([]);
+                .expect(flights);
         });
 
         it('should return a response in 1 second or less (TTFB <= 1)', () => {});
