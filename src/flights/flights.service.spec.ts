@@ -15,4 +15,19 @@ describe('FlightsService', () => {
     it('should be defined', () => {
         expect(service).toBeDefined();
     });
+
+    describe('getFlights', () => {
+
+        it('should get flights from every source', () => {
+
+        });
+
+        it('should merge the flights responses from every source', () => {
+
+        });
+
+        it('should return an error if any of the sources fails', () => {
+
+        });
+    });
 });
