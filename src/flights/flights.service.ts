@@ -1,9 +1,11 @@
+import { uniqBy } from 'lodash';
 import { HttpService } from '@nestjs/axios';
 import { Injectable } from '@nestjs/common';
 import { catchError, combineLatest, firstValueFrom, map } from 'rxjs';
 
 import { Flight } from './interfaces/flight.interface';
 import { flightsSourceUrl1, flightsSourceUrl2 } from './constants';
+import { getFlightIdentifier } from './helpers/identifier';
 
 @Injectable()
 export class FlightsService {
@@ -42,7 +44,7 @@ export class FlightsService {
     }
 
     private filterUniqueFlights(flights: Flight[]): Flight[] {
-        return [];
+        return uniqBy(flights, getFlightIdentifier);
     }
 }
 
