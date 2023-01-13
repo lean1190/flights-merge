@@ -26,6 +26,8 @@ describe('FlightsService', () => {
         service = module.get<FlightsService>(FlightsService);
     });
 
+    afterEach(() => jest.resetModules());
+
     describe('getFlights', () => {
 
         it('should get flights from every source', async () => {

@@ -25,6 +25,8 @@ describe('FlightsController', () => {
         await app.init();
     });
 
+    afterEach(() => jest.resetModules());
+
     afterAll(async () => await app.close());
 
     describe('getFlights', () => {
