@@ -1,4 +1,9 @@
 import { Injectable } from '@nestjs/common';
 
 @Injectable()
-export class FlightsService {}
+export class FlightsService {
+
+    public async getFlights() {
+        return [];
+    }
+}

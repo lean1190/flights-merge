@@ -8,14 +8,13 @@ import { FlightsModule } from './flights.module';
 describe('FlightsController', () => {
     let app: INestApplication;
     let fakeFlightsService: FlightsService = {
-        getFlights: () => []
+        getFlights: async () => []
     };
 
     beforeEach(async () => {
         const module: TestingModule = await Test
             .createTestingModule({ imports: [FlightsModule] })
-            .overrideProvider(FlightsService)
-            .useValue(fakeFlightsService)
+            .overrideProvider(FlightsService).useValue(fakeFlightsService)
             .compile();
 
         app = module.createNestApplication();
