@@ -1,10 +1,10 @@
-import { uniqBy } from 'lodash';
+import { uniqBy, flatMap } from 'lodash';
 import { HttpService } from '@nestjs/axios';
 import { Injectable } from '@nestjs/common';
 import { catchError, combineLatest, map } from 'rxjs';
 
 import { Flight } from './interfaces/flight.interface';
-import { flightsSourceUrl1, flightsSourceUrl2 } from './constants';
+import { flightSources } from './constants';
 import { getFlightIdentifier } from './helpers/identifier';
 
 @Injectable()
@@ -12,14 +12,8 @@ export class FlightsService {
     constructor(private readonly httpService: HttpService) {}
 
     public getFlights() {
-        return combineLatest([
-            this.httpService.get<ResponseGetFlights>(flightsSourceUrl1),
-            this.httpService.get<ResponseGetFlights>(flightsSourceUrl2),
-        ]).pipe(
-            map(([flightsFromSource1, flightsFromSource2]) => this.mapResponseToFlights([
-                ...flightsFromSource1.data.flights,
-                ...flightsFromSource2.data.flights,
-            ])),
+        return combineLatest(flightSources.map((source) => this.httpService.get<ResponseGetFlights>(source))).pipe(
+            map((responses) => this.mapResponseToFlights(flatMap(responses, (response) => response.data.flights))),
             map((allFlights) => this.filterUniqueFlights(allFlights)),
             catchError((error) => {
                 throw new Error('Something went wrong');

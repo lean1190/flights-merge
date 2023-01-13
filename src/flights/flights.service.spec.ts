@@ -5,6 +5,7 @@ import { of, throwError } from 'rxjs';
 import { FlightsService } from './flights.service';
 import { exampleFlights1, exampleFlights2, expectedMergedFlights } from './test-flights';
 import { takeValues } from '../helpers/observable';
+import { flightSources } from './constants';
 
 describe('FlightsService', () => {
     let service: FlightsService;
@@ -32,8 +33,7 @@ describe('FlightsService', () => {
 
         it('should get flights from every source', async () => {
             await takeValues(service.getFlights());
-            expect(fakeHttpService.get).toHaveBeenCalledWith('https://coding-challenge.powerus.de/flight/source1');
-            expect(fakeHttpService.get).toHaveBeenCalledWith('https://coding-challenge.powerus.de/flight/source1');
+            flightSources.forEach((source) => expect(fakeHttpService.get).toHaveBeenCalledWith(source));
         });
 
         it('should merge the flights and remove duplicates', async () => {
