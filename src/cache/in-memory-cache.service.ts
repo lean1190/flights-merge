@@ -4,6 +4,10 @@ import { calculateExpirationDate } from './helpers/date';
 
 import { Cache, CacheParams } from './interfaces/cache.interface';
 
+// After I finished implementing this I discovered Nestjs has almost the same implementation
+// with the same caching purpose (https://docs.nestjs.com/techniques/caching)
+// Since I implemented this already, I decided to still use it.
+// In the future I would replace it for the one provided by the framework.
 @Injectable()
 export class InMemoryCacheService<T> implements Cache<T> {
 
