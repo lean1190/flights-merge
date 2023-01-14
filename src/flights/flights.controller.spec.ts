@@ -14,7 +14,7 @@ describe('FlightsController', () => {
 
     beforeEach(async () => {
         fakeFlightsService = {
-            getFlights: jest.fn().mockReturnValueOnce(of(flights)),
+            getAll: jest.fn().mockReturnValueOnce(of(flights)),
         };
         const module: TestingModule = await Test
             .createTestingModule({ imports: [FlightsModule] })
@@ -38,7 +38,7 @@ describe('FlightsController', () => {
         });
 
         it('should return a response in 1 second or less (TTFB <= 1) even if the service is delayed', () => {
-            fakeFlightsService.getFlights = jest
+            fakeFlightsService.getAll = jest
                 .fn()
                 .mockReturnValueOnce(of(flights).pipe(delay(2000)));
 
@@ -56,7 +56,7 @@ describe('FlightsController', () => {
         });
 
         it('should return a 500 UnknownServerError if getting flights fails', () => {
-            fakeFlightsService.getFlights = jest
+            fakeFlightsService.getAll = jest
                 .fn()
                 .mockReturnValueOnce(throwError(() => new Error('Something went wrong')));
 

@@ -11,7 +11,7 @@ import { getFlightIdentifier } from './helpers/identifier';
 export class FlightsService {
     constructor(private readonly httpService: HttpService) {}
 
-    public getFlights() {
+    public getAll() {
         return combineLatest(flightSources.map((source) => this.httpService.get<ResponseGetFlights>(source))).pipe(
             map((responses) => this.mapResponseToFlights(flatMap(responses, (response) => response.data.flights))),
             map((allFlights) => this.filterUniqueFlights(allFlights)),

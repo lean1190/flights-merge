@@ -9,6 +9,6 @@ export class FlightsController {
 
     @Get()
     public getFlights() {
-        return this.flightsService.getFlights();
+        return this.flightsService.getAll();
     }
 }

@@ -29,15 +29,15 @@ describe('FlightsService', () => {
 
     afterEach(() => jest.resetModules());
 
-    describe('getFlights', () => {
+    describe('getAll', () => {
 
         it('should get flights from every source', async () => {
-            await takeValues(service.getFlights());
+            await takeValues(service.getAll());
             flightSources.forEach((source) => expect(fakeHttpService.get).toHaveBeenCalledWith(source));
         });
 
         it('should merge the flights and remove duplicates', async () => {
-            const [flights] = await takeValues(service.getFlights());
+            const [flights] = await takeValues(service.getAll());
             expect(flights).toStrictEqual(expectedMergedFlights);
         });
 
@@ -49,7 +49,7 @@ describe('FlightsService', () => {
                 .mockReturnValueOnce(throwError(() => expectedError));
 
             try {
-                await takeValues(service.getFlights());
+                await takeValues(service.getAll());
             } catch (error) {
                 expect(error).toStrictEqual(expectedError);
             }
