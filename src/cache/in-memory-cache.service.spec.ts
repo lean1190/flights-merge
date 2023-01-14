@@ -21,6 +21,8 @@ describe('InMemoryCacheService', () => {
         service = module.get<InMemoryCacheService<string>>(InMemoryCacheService);
     });
 
+    afterEach(() => jest.resetModules());
+
     describe('set', () => {
 
         it('should set a value in the cache with default TTL', async () => {
