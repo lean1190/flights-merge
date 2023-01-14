@@ -1,7 +1,7 @@
 import { Module } from '@nestjs/common';
-import { CacheService } from './cache.service';
+import { InMemoryCacheService } from './in-memory-cache.service';
 
 @Module({
-    providers: [CacheService]
+    providers: [InMemoryCacheService]
 })
 export class CacheModule {}
