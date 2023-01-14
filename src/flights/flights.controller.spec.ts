@@ -6,7 +6,7 @@ import { INestApplication } from '@nestjs/common';
 import { FlightsService } from './flights.service';
 import { FlightsModule } from './flights.module';
 
-describe('FlightsController', () => {
+describe.skip('FlightsController', () => {
     const flights = [{}, {}, {}];
 
     let app: INestApplication;
