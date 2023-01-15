@@ -37,7 +37,7 @@ export class InMemoryCacheService<T> implements Cache<T> {
             expireAt: calculateExpirationDate(ttlSeconds)
         };
 
-        return of();
+        return of(undefined);
     }
 
     public get(key: string): Observable<T> | Observable<undefined> {
@@ -56,11 +56,11 @@ export class InMemoryCacheService<T> implements Cache<T> {
         }
 
         delete this.cacheStore[key];
-        return of();
+        return of(undefined);
     }
 
     public clear(): Observable<void> {
         this.cacheStore = {};
-        return of();
+        return of(undefined);
     }
 }
