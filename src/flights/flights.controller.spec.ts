@@ -8,7 +8,7 @@ import { FlightsService } from './flights.service';
 import { FlightsModule } from './flights.module';
 import { CacheModule } from '../cache/cache.module';
 
-describe.skip('FlightsController', () => {
+describe('FlightsController', () => {
     const flights = [{}, {}, {}];
 
     let app: INestApplication;
@@ -20,12 +20,13 @@ describe.skip('FlightsController', () => {
 
         fakeInterval = jest.spyOn(rxjs, 'interval').mockImplementation(() => of())
         fakeFlightsService = {
-            getAll: jest.fn().mockReturnValueOnce(of(flights)),
+            getAll: jest.fn().mockReturnValue(of(flights)),
         };
         const module: TestingModule = await Test.createTestingModule({
-            imports: [FlightsModule, CacheModule],
-            providers: [{ provide: FlightsService, useValue: fakeFlightsService }]
-        }).compile();
+            imports: [FlightsModule, CacheModule]
+        })
+        .overrideProvider(FlightsService).useValue(fakeFlightsService)
+        .compile();
 
         app = module.createNestApplication();
         await app.init();
@@ -36,13 +37,7 @@ describe.skip('FlightsController', () => {
     afterAll(async () => await app.close());
 
     describe('getFlights', () => {
-        // Unfortunately I couldn't figure out how to test this with the current implementation.
-        // The test seems to be hanging because the interval observable is still running.
-        // Also the interval gets executed after the test completes, so the test does not pass because the value is not the expected one.
-        // There's probably a better approach for testing this although I couldn't figure it out so far.
         it('should return flights information', (done) => {
-            jest.runAllTimers();
-
             request(app.getHttpServer())
                 .get('/flights')
                 .expect(200)

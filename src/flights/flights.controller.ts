@@ -1,6 +1,6 @@
 import { range, isEmpty } from 'lodash';
 import { Controller, Get, OnModuleDestroy } from '@nestjs/common';
-import { interval, switchMap, startWith, catchError, of, merge, skipWhile, take, Observable, Subscription } from 'rxjs';
+import { interval, switchMap, startWith, catchError, of, merge, skipWhile, take, Observable, Subscription, shareReplay } from 'rxjs';
 
 import { InMemoryCacheService } from '../cache/in-memory-cache.service';
 import { FlightsService } from './flights.service';
@@ -10,7 +10,9 @@ import { Flight } from './interfaces/flight.interface';
 export class FlightsController implements OnModuleDestroy {
 
     private readonly flightsCacheKey = 'getFlightsKey';
-    private intervalSubscription: Subscription;
+
+    private flightsFromCache: Observable<Flight[]>;
+    private flightsSubscription: Subscription;
 
     constructor(
         private flightsService: FlightsService,
@@ -25,19 +27,25 @@ export class FlightsController implements OnModuleDestroy {
         );
 
         const oneHourInMs = 3600000;
-        this.intervalSubscription = interval(oneHourInMs).pipe(
+        const cacheFill = interval(oneHourInMs).pipe(
             startWith(0),
             switchMap(() => getFlightsForCache),
             switchMap((flights) => this.cacheService.set(this.flightsCacheKey, flights, { ttlSeconds: oneHourInMs / 1000 }))
-        ).subscribe();
+        );
+        this.flightsFromCache = cacheFill.pipe(
+            switchMap(() => (this.cacheService.get(this.flightsCacheKey) as Observable<Flight[]>)),
+            shareReplay(1)
+        );
+
+        this.flightsSubscription = this.flightsFromCache.subscribe();
     }
 
     onModuleDestroy() {
-        this.intervalSubscription.unsubscribe();
+        this.flightsSubscription.unsubscribe();
     }
 
     @Get()
-    public getFlights() {
-        return this.cacheService.get(this.flightsCacheKey);
+    public async getFlights() {
+        return this.flightsFromCache.pipe(take(1));
     }
 }
