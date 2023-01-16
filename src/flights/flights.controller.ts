@@ -27,12 +27,12 @@ export class FlightsController implements OnModuleDestroy {
         );
 
         const oneHourInMs = 3600000;
-        const cacheFill = interval(oneHourInMs).pipe(
+        const fillCache = interval(oneHourInMs).pipe(
             startWith(0),
             switchMap(() => getFlightsForCache),
             switchMap((flights) => this.cacheService.set(this.flightsCacheKey, flights, { ttlSeconds: oneHourInMs / 1000 }))
         );
-        this.flightsFromCache = cacheFill.pipe(
+        this.flightsFromCache = fillCache.pipe(
             switchMap(() => (this.cacheService.get(this.flightsCacheKey) as Observable<Flight[]>)),
             shareReplay(1)
         );
