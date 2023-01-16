@@ -1,7 +1,7 @@
 import { uniqBy, flatMap } from 'lodash';
 import { HttpService } from '@nestjs/axios';
 import { Injectable } from '@nestjs/common';
-import { catchError, combineLatest, map } from 'rxjs';
+import { catchError, forkJoin, map } from 'rxjs';
 
 import { Flight } from './interfaces/flight.interface';
 import { flightSources } from './constants';
@@ -12,7 +12,7 @@ export class FlightsService {
     constructor(private readonly httpService: HttpService) {}
 
     public getAll() {
-        return combineLatest(flightSources.map((source) => this.httpService.get<ResponseGetFlights>(source))).pipe(
+        return forkJoin(flightSources.map((source) => this.httpService.get<ResponseGetFlights>(source))).pipe(
             map((responses) => this.mapResponseToFlights(flatMap(responses, (response) => response.data.flights))),
             map((allFlights) => this.filterUniqueFlights(allFlights)),
             catchError((error) => {
